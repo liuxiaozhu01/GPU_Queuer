@@ -40,19 +40,28 @@ def find_free_gpu():
 def narrow_setup(interval=120):
     free_gpu = find_free_gpu()
     while len(free_gpu) == 0:
+        # print("no free GPU...")
         time.sleep(interval)
     job = JOB_QUEUE.get()
-    print("GPU {} is free. Excute cmd:\n    \
-          work_dir: {}\n    \
-          cmd: {}".format(free_gpu[0], job.work_dir, job.cmd))
+    print("GPU {} is free. Excute cmd:\n work_dir: {}\n cmd: {}".format(free_gpu[0], job.work_dir, job.cmd))
     job.execute()
     
-def main():
+def job_from_input():
     print("Add a new job")
     work_dir = input("Working Directory: ")
     cmd = input("Command: ")
     newjob = Job(work_dir, cmd)
     JOB_QUEUE.put(newjob)
+
+def jobs_from_json(jobs_file):
+    with open(jobs_file) as f:
+        jobs = json.load(f)['jobs']
+    for job in jobs:
+        newJob = Job(job['work_dir'], job['cmd'])
+        JOB_QUEUE.put(newJob)
+    
+def main():
+    jobs_from_json('jobs.json')
     
     narrow_setup(10)
 
