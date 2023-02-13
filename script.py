@@ -63,6 +63,14 @@ def jobs_from_json(jobs_file):
 def main():
     jobs_from_json('jobs.json')
     
+    """
+    if there are many jobs in queue, and not block between father and son process
+    there may be some wrong when a new job just begin and the utilization of GPU is not too high, 
+    which may lead to wrong detection
+    """
+    # while not JOB_QUEUE.empty():
+    #     narrow_setup(10)
+    
     narrow_setup(10)
 
 
