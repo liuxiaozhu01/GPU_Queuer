@@ -7,7 +7,7 @@ UTILIZATION_THRESH = 10
 POWER_THRESH = 0
 MEMORY_USED_THRESH = 1024
 
-CMD_QUEUE = Queue()
+JOB_QUEUE = Queue()
 
 class Job():
     def __init__(self, work_dir, cmd) -> None:
@@ -41,17 +41,18 @@ def narrow_setup(interval=120):
     free_gpu = find_free_gpu()
     while len(free_gpu) == 0:
         time.sleep(interval)
+    job = JOB_QUEUE.get()
     print("GPU {} is free. Excute cmd:\n    \
           work_dir: {}\n    \
-          cmd: {}".format(free_gpu[0], CMD_QUEUE[0].work_dir, CMD_QUEUE[0].cmd))
-    CMD_QUEUE[0].execute()
+          cmd: {}".format(free_gpu[0], job.work_dir, job.cmd))
+    job.execute()
     
 def main():
     print("Add a new job")
     work_dir = input("Working Directory: ")
     cmd = input("Command: ")
     newjob = Job(work_dir, cmd)
-    CMD_QUEUE.put(newjob)
+    JOB_QUEUE.put(newjob)
     
     narrow_setup(10)
 
