@@ -34,5 +34,5 @@ def narrow_setup(interval=120):
     os.system(CMD_QUEUE[0])
 
 
-if __name___ == '__main__':
+if __name__ == '__main__':
     narrow_setup(2)
