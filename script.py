@@ -38,7 +38,7 @@ def find_free_gpu():
         if utilization <= UTILIZATION_THRESH and \
             power > POWER_THRESH and \
             memory_used < MEMORY_USED_THRESH:
-                gpu_str = f"GPU/id: {index}, GPU/memory: {memory_used}/{memory_total} MiB, GPU/power: {power} W, GPU/utilization: {utilization}\n"
+                gpu_str = f"GPU/id: {index}, GPU/memory: {memory_used}/{memory_total} MiB, GPU/power: {power} W, GPU/utilization: {utilization} \n"
                 sys.stdout.write(gpu_str)
                 sys.stdout.flush()
                 free_gpu.append(index)
