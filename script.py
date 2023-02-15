@@ -51,14 +51,14 @@ def narrow_setup(interval=120):
         time.sleep(interval)
         free_gpu = find_free_gpu()
     job = JOB_QUEUE.get()
-    sys.stdout.write("GPU {} is free. Excute cmd:\n work_dir: {}\n cmd: {}".format(free_gpu[0], job.work_dir, job.cmd))
+    sys.stdout.write("GPU {} is free. Excute cmd:\n work_dir: {}\n cmd: {}\n".format(free_gpu[0], job.work_dir, job.cmd))
     sys.stdout.flush()
     ret = job.execute()
     if ret == 0:
-        sys.stdout.write("Execution successed!")
+        sys.stdout.write("Execution successed!\n")
         sys.stdout.flush()
     else:
-        sys.stdout.write("Execution failed!")
+        sys.stdout.write("Execution failed!\n")
         sys.stdout.flush()
         
     
