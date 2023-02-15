@@ -17,7 +17,8 @@ class Job():
     
     def execute(self):
         total_cmd = 'cd {} && {}'.format(self.work_dir, self.cmd)
-        # os.system(total_cmd)
+        ret = os.system(total_cmd)
+        return ret
         
 
 
@@ -37,7 +38,7 @@ def find_free_gpu():
         if utilization <= UTILIZATION_THRESH and \
             power > POWER_THRESH and \
             memory_used < MEMORY_USED_THRESH:
-                gpu_str = f"GPU/id: {index}, GPU/memory: {memory_used}/{memory_total} MiB, GPU/power: {power} W, GPU/utilization: {utilization}"
+                gpu_str = f"GPU/id: {index}, GPU/memory: {memory_used}/{memory_total} MiB, GPU/power: {power} W, GPU/utilization: {utilization}\n"
                 sys.stdout.write(gpu_str)
                 sys.stdout.flush()
                 free_gpu.append(index)
@@ -50,8 +51,16 @@ def narrow_setup(interval=120):
         time.sleep(interval)
         free_gpu = find_free_gpu()
     job = JOB_QUEUE.get()
-    print("GPU {} is free. Excute cmd:\n work_dir: {}\n cmd: {}".format(free_gpu[0], job.work_dir, job.cmd))
-    job.execute()
+    sys.stdout.write("GPU {} is free. Excute cmd:\n work_dir: {}\n cmd: {}".format(free_gpu[0], job.work_dir, job.cmd))
+    sys.stdout.flush()
+    ret = job.execute()
+    if ret == 0:
+        sys.stdout.write("Execution successed!")
+        sys.stdout.flush()
+    else:
+        sys.stdout.write("Execution failed!")
+        sys.stdout.flush()
+        
     
 def job_from_input():
     print("Add a new job")
