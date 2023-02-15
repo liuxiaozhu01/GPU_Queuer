@@ -1,6 +1,7 @@
 import json
 import os
 import time
+import sys
 from queue import Queue
 
 UTILIZATION_THRESH = 10
@@ -16,7 +17,8 @@ class Job():
     
     def execute(self):
         total_cmd = 'cd {} && {}'.format(self.work_dir, self.cmd)
-        os.system(total_cmd)
+        # os.system(total_cmd)
+        
 
 
 def get_info():
@@ -30,10 +32,14 @@ def find_free_gpu():
         utilization = info['utilization.gpu']
         power = info['power.draw']
         memory_used = info['memory.used']
+        memory_total = info['memory.total']
     
         if utilization <= UTILIZATION_THRESH and \
             power > POWER_THRESH and \
             memory_used < MEMORY_USED_THRESH:
+                gpu_str = f"GPU/id: {index}, GPU/memory: {memory_used}/{memory_total} MiB, GPU/power: {power} W, GPU/utilization: {utilization}"
+                sys.stdout.write(gpu_str)
+                sys.stdout.flush()
                 free_gpu.append(index)
     return free_gpu
 
@@ -42,6 +48,7 @@ def narrow_setup(interval=120):
     while len(free_gpu) == 0:
         # print("no free GPU...")
         time.sleep(interval)
+        free_gpu = find_free_gpu()
     job = JOB_QUEUE.get()
     print("GPU {} is free. Excute cmd:\n work_dir: {}\n cmd: {}".format(free_gpu[0], job.work_dir, job.cmd))
     job.execute()
