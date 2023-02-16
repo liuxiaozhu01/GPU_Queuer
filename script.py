@@ -7,6 +7,7 @@ from queue import Queue
 UTILIZATION_THRESH = 10
 POWER_THRESH = 0
 MEMORY_USED_THRESH = 1024
+JOB_EXECUTIION_INTERVAL = 120
 
 JOB_QUEUE = Queue()
 
@@ -38,32 +39,32 @@ def find_free_gpu():
         if utilization <= UTILIZATION_THRESH and \
             power > POWER_THRESH and \
             memory_used < MEMORY_USED_THRESH:
-                gpu_str = f"GPU/id: {index}, GPU/memory: {memory_used}/{memory_total} MiB, GPU/power: {power} W, GPU/utilization: {utilization} \n"
-                sys.stdout.write(gpu_str)
-                sys.stdout.flush()
+                gpu_str = f"GPU/id: {index}, GPU/memory: {memory_used}/{memory_total} MiB, GPU/power: {power} W, GPU/utilization: {utilization}\n"
+                print(gpu_str, flush=True)
                 free_gpu.append(index)
     return free_gpu
 
 def narrow_setup(interval=120):
-    free_gpu = find_free_gpu()
-    while len(free_gpu) == 0:
-        # print("no free GPU...")
-        time.sleep(interval)
+    while not JOB_QUEUE.empty():
         free_gpu = find_free_gpu()
-    job = JOB_QUEUE.get()
-    sys.stdout.write("GPU {} is free. Excute cmd:\n work_dir: {}\n cmd: {}\n".format(free_gpu[0], job.work_dir, job.cmd))
-    sys.stdout.flush()
-    ret = job.execute()
-    if ret == 0:
-        sys.stdout.write("Execution successed!\n")
-        sys.stdout.flush()
-    else:
-        sys.stdout.write("Execution failed!\n")
-        sys.stdout.flush()
+        while len(free_gpu) == 0:
+            # print("no free GPU...")
+            time.sleep(interval)
+            free_gpu = find_free_gpu()
+        job = JOB_QUEUE.get()
+        print("GPU {} is free. Excute cmd:\n work_dir: {}\n cmd: {}\n".format(free_gpu[0], job.work_dir, job.cmd), flush=True)
+        ret = job.execute()
+        if ret == 0:
+            print("Execution successed!\n", flush=True)
+        else:
+            print("Execution failed!\n", flush=True)
+        
+        time.sleep(JOB_EXECUTIION_INTERVAL)
+        print("Check for next job...", flush=True)
         
     
 def job_from_input():
-    print("Add a new job")
+    print("Add a new job", flush=True)
     work_dir = input("Working Directory: ")
     cmd = input("Command: ")
     newjob = Job(work_dir, cmd)
@@ -78,7 +79,7 @@ def jobs_from_json(jobs_file):
     
 def main():
     jobs_from_json('jobs.json')
-    print("Checking available and free GPU...")    
+    print("Checking available and free GPU...", flush=True)    
     
     """
     if there are many jobs in queue, and not block between father and son process

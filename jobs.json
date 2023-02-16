@@ -1,14 +1,7 @@
 {
     "jobs":
     [
-<<<<<<< HEAD
-        {"work_dir": "/root/workspace/ngp-VolSDF", "cmd": "nohup python training/exp_runner.py --conf ./confs/test_Grid.conf --scan_id 2 --batch_size 8 >train_monoGird.log 2>&1 &"}
-=======
-        {
-            "work_dir": "/root/workspace/ngp-VolSDF", 
-            "cmd": "nohup python training/exp_runner.py --conf ./confs/test_Grid.conf --scan_id 2 --batch_size 8 >train_tcnnGird.log 2>&1 &"
-        }
-        // {"work_dir": "/root/workspace/ngp-VolSDF", "cmd": "python training/exp_runner.py --conf ./confs/test_Grid.conf --scan_id 2 --batch_size 8"}
->>>>>>> eabb7678ae1f722f7c46b5361e4dc557ec397223
+        {"work_dir": "/root/workspace/ngp-VolSDF", "cmd": "nohup python training/exp_runner.py --conf ./confs/dtu_Grid.conf --scan_id 24 --batch_size 8 >train_dtu_Gird.log 2>&1 &"}
+
     ]
 }
