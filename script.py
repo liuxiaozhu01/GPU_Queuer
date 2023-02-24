@@ -7,7 +7,7 @@ from queue import Queue
 UTILIZATION_THRESH = 10
 POWER_THRESH = 0
 MEMORY_USED_THRESH = 1024
-JOB_EXECUTIION_INTERVAL = 120
+JOB_EXECUTIION_INTERVAL = 180
 
 JOB_QUEUE = Queue()
 
@@ -77,8 +77,8 @@ def jobs_from_json(jobs_file):
         newJob = Job(job['work_dir'], job['cmd'])
         JOB_QUEUE.put(newJob)
     
-def main():
-    jobs_from_json('jobs.json')
+def main(file='jobs.json'):
+    jobs_from_json(file)
     print("Checking available and free GPU...", flush=True)    
     
     """
@@ -93,4 +93,9 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    args = sys.argv
+    if len(args) < 2:
+        print("No job list!")
+        exit(1)
+    
+    main(args[1])
