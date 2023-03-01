@@ -1,0 +1,7 @@
+{
+    "jobs":
+    [
+        {"work_dir": "/root/workspace/ngp-VolSDF", "cmd": "nohup python training/exp_runner.py --conf ./confs/dtu_grids_allviews_mask.conf --scan_id 24 >dtu_grids_allviews_24_mask.log 2>&1 &"},
+        {"work_dir": "/root/workspace/monosdf/code", "cmd": "nohup python training/exp_runner.py --conf ./confs/dtu_grids_allviews_mask.conf --scan_id 24 >dtu_grids_allviews_24_mask.log 2>&1 &"}
+    ]
+}

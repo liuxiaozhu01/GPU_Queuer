@@ -61,6 +61,7 @@ def narrow_setup(interval=120):
         
         time.sleep(JOB_EXECUTIION_INTERVAL)
         print("Check for next job...", flush=True)
+    print("No more jobs in waiting. Bye!", flush=True)
         
     
 def job_from_input():
